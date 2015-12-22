@@ -94,7 +94,7 @@ Returns an object containing two functions, `stop` and `update`.
 stop([callback])
 ```
 
-Calling this method stops the emitter from running (interally this just calls the `stop` method on the Tracker computation). It also takes an optional callback function that gets passed the response value from the emitter `sourceFn`. This allows you to perform extra cleanup, one example might be calling a `stop` on a subscription handle.
+Calling this method stops the emitter from running (internally this just calls the `stop` method on the Tracker computation). It also takes an optional callback function that gets passed the response value from the emitter `sourceFn`. This allows you to perform extra cleanup, one example might be calling a `stop` on a subscription handle.
 
 ```
 update
