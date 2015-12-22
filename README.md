@@ -1,6 +1,6 @@
 # Tracker Emitter
 
-TODO
+This package provides an API to easily hook listener and emitter functions into Tracker.
 
 ## Installation
 
