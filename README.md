@@ -44,7 +44,10 @@ limit = 10;
 // notify the emitter of the new limit
 todosSubscriptionEmitter.update();
 
-// stop the emitter and stop the Meteor subscription
+// at a later time we can stop the emitter and
+// through the callback function, stop the Meteor subscription.
+// in the real world this might live within a React component's
+// `componentDidUnmount` method.
 todosSubscriptionEmitter.stop(handle => handle.stop());
 ```
 
@@ -60,17 +63,19 @@ const state = {
 // watch a mongo cursor
 const todosEmitter = Tracker.emitter(
   args => {
-    const selector = args.hideDone ? { checked: { $ne: true }} : {};
-    return Todos.find(selector);
+    const selector = args.hideDone ? { checked: { $ne: true } } : {};
+    return Todos.find(selector).fetch();
   },
   response => state.todos = response,
-  () => { hideDone: state.hideDone }
+  () => ({ hideDone: state.hideDone })
 );
 
 // update state
 state.hideDone = true;
+
 // notify the `todosEmitter` of the update
 todosEmitter.update();
+
 // call the stop method to stop the emitter
 todosEmitter.stop();
 ```
