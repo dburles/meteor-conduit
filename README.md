@@ -92,9 +92,9 @@ Returns an object containing two functions, `stop` and `update`.
 
 Takes the following 3 functions as arguments:
 
-1. `sourceFn` - Return a reactive data source, called with one argument containing the object returned by `argsFn`.
-2. `onChangeFn` - Called whenever the reactive function provided by `sourceFn` changes.
-3. `argsFn` (Optional) - Called whenever `update` is called. Must return an object.
+1. `sourceFn` - Must return a reactive data source, this function is called with an argument containing the object returned by `argsFn`.
+2. `onChangeFn` - This function is called with an argument containing the returned value from `sourceFn` whenever the reactive function provided by `sourceFn` changes.
+3. `argsFn` (Optional) - Must return an object, this function is called whenever `update` is called.
 
 ```
 stop([callback])
