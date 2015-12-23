@@ -16,8 +16,9 @@ Tracker.emitter = (sourceFn, onChangeFn, argsFn) => {
   let response;
 
   const c = Tracker.autorun(() => {
-    const pureArgs = transform(args, value => value.get());
-    response = sourceFn(pureArgs);
+    response = sourceFn(
+      transform(args, value => value.get())
+    );
     onChangeFn(response);
   });
 
