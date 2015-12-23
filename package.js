@@ -11,8 +11,7 @@ Package.onUse(function(api) {
   api.use([
     'ecmascript',
     'tracker',
-    'reactive-var',
-    'ramda:ramda@0.18.0'
+    'reactive-var'
   ], 'client');
   api.addFiles('tracker-emitter.js', 'client');
 });

@@ -1,12 +1,22 @@
+const transform = (obj, fn) => {
+  return Object.keys(obj).reduce(
+    (next, key) => {
+      next[key] = fn(obj[key]);
+      return next;
+    },
+    {}
+  );
+};
+
 Tracker.emitter = (sourceFn, onChangeFn, argsFn) => {
   const args = argsFn
-    ? R.map(value => new ReactiveVar(value), argsFn())
+    ? transform(argsFn(), value => new ReactiveVar(value))
     : {};
 
   let response;
 
   const c = Tracker.autorun(() => {
-    const pureArgs = R.map(value => value.get(), args);
+    const pureArgs = transform(args, value => value.get());
     response = sourceFn(pureArgs);
     onChangeFn(response);
   });
@@ -19,7 +29,9 @@ Tracker.emitter = (sourceFn, onChangeFn, argsFn) => {
       c.stop();
     },
     update() {
-      _.each(argsFn(), (value, key) => args[key].set(value));
+      return Object.keys(args).forEach(
+        key => args[key].set(argsFn()[key])
+      );
     }
   };
 };
