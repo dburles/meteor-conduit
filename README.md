@@ -88,13 +88,53 @@ todosEmitter.stop();
 Tracker.emitter(sourceFn, onChangeFn[, argsFn])
 ```
 
-Returns an object containing two functions, `stop` and `update`.
+#### Arguments
 
 Takes the following 3 functions as arguments:
 
-1. `sourceFn` - Must return a reactive data source, this function is called with an argument containing the object returned by `argsFn`.
-2. `onChangeFn` - This function is called with an argument containing the returned value from `sourceFn` whenever the reactive function provided by `sourceFn` changes.
-3. `argsFn` (Optional) - Must return an object, this function is called whenever `update` is called.
+##### 1. Source
+
+This function must return a reactive data source. If an `argsFn` is provided to the emitter, the `sourceFn` is called with an argument containing the object returned by `argsFn`.
+
+Examples:
+
+```js
+// No args required
+const sourceFn = () => Session.get('test');
+
+// Args passed to subscription
+const sourceFn = args => Meteor.subscribe('post', args.currentPostId);
+```
+
+##### 2. Change
+
+This function is called with an argument containing the returned value from `sourceFn` both when the reactive function provided by `sourceFn` changes, or any of the arguments change.
+
+Examples:
+
+```js
+const onChange = response => console.log(response);
+
+// Log subscription readiness
+const onChange = handle => console.log(handle.ready());
+```
+
+##### 3. Arguments (Optional)
+
+Must return an object. This function is called when `update` is called.
+
+Example:
+
+```js
+const argsFn = () => {
+  const { currentPostId } = store.getState();
+  return { currentPostId };
+};
+```
+
+#### Return value
+
+Calling `Tracker.emitter` returns an object containing two functions, `stop` and `update`.
 
 ```
 stop([callback])
