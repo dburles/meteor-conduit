@@ -94,7 +94,7 @@ Takes the following 3 function arguments:
 
 1. sourceFn - Return a reactive data source, called with one argument containing the object returned by `argsFn`.
 2. onChangeFn - Called whenever the reactive function provided by `sourceFn` changes.
-3. argsFn (Optional) - Called whenever `update` is called.
+3. argsFn (Optional) - Called whenever `update` is called. Must return an object.
 
 ```
 stop([callback])
