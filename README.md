@@ -90,7 +90,7 @@ Tracker.emitter(sourceFn, onChangeFn[, argsFn])
 
 Returns an object containing two functions, `stop` and `update`.
 
-Takes the following 3 function arguments:
+Takes the following 3 functions as arguments:
 
 1. `sourceFn` - Return a reactive data source, called with one argument containing the object returned by `argsFn`.
 2. `onChangeFn` - Called whenever the reactive function provided by `sourceFn` changes.
