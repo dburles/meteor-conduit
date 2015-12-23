@@ -23,7 +23,7 @@ Tracker.emitter(
 
 ### Advanced usage
 
-#### Meteor subscription
+#### Meteor Subscription
 
 This example highlights working with a Meteor subscription.
 
@@ -89,6 +89,12 @@ Tracker.emitter(sourceFn, onChangeFn[, argsFn])
 ```
 
 Returns an object containing two functions, `stop` and `update`.
+
+Takes the following 3 function arguments:
+
+1. sourceFn - Return a reactive data source, called with one argument containing the object returned by `argsFn`.
+2. onChangeFn - Called whenever the reactive function provided by `sourceFn` changes.
+3. argsFn (Optional) - Called whenever `update` is called.
 
 ```
 stop([callback])
