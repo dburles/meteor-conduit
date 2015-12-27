@@ -9,7 +9,7 @@ const transform = (obj, fn) => {
 };
 
 Tracker.emitter = (sourceFn, onChangeFn, argsFn) => {
-  const args = argsFn
+  const argsR = argsFn
     ? transform(argsFn(), value => new ReactiveVar(value))
     : {};
 
@@ -17,7 +17,7 @@ Tracker.emitter = (sourceFn, onChangeFn, argsFn) => {
 
   const c = Tracker.autorun(() => {
     response = sourceFn(
-      transform(args, value => value.get())
+      transform(argsR, value => value.get())
     );
     onChangeFn(response);
   });
@@ -30,8 +30,9 @@ Tracker.emitter = (sourceFn, onChangeFn, argsFn) => {
       c.stop();
     },
     update() {
-      return Object.keys(args).forEach(
-        key => args[key].set(argsFn()[key])
+      const args = argsFn();
+      return Object.keys(argsR).forEach(
+        key => argsR[key].set(args[key])
       );
     }
   };
