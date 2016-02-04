@@ -79,7 +79,7 @@ todosConduit.stop();
 
 ## API
 
-##### input (optional)
+#### input (optional)
 
 Must return an object. This function is called when `update` is called.
 
@@ -106,7 +106,7 @@ Examples:
 .source(args => Meteor.subscribe('post', args.currentPostId));
 ```
 
-##### output
+#### output
 
 This function is called with an argument containing the returned value from `source` both when the reactive function provided by `source` changes, or any of the arguments change.
 
