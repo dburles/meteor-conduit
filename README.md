@@ -39,10 +39,10 @@ const todosSubscriptionConduit = conduit
 // Change state
 limit = 10;
 
-// Notify the emitter of the new limit
+// Notify the conduit of the new limit
 todosSubscriptionConduit.update();
 
-// At a later time we can stop the emitter and
+// At a later time we can stop the conduit and
 // through the callback function, stop the Meteor subscription.
 // In the real world this might live within a React component's
 // `componentDidUnmount` method.
@@ -73,7 +73,7 @@ state.hideDone = true;
 // Notify the `todosConduit` of the update
 todosConduit.update();
 
-// Call the stop method to stop the emitter
+// Call the stop method to stop the conduit
 todosConduit.stop();
 ```
 
