@@ -79,12 +79,6 @@ todosConduit.stop();
 
 ## API
 
-### conduit
-
-```
-conduit [.input] .source .output
-```
-
 ##### input (optional)
 
 Must return an object. This function is called when `update` is called.
@@ -92,59 +86,54 @@ Must return an object. This function is called when `update` is called.
 Example:
 
 ```js
-const argsFn = () => {
+.input(() => {
   const { currentPostId } = store.getState();
   return { currentPostId };
-};
+});
 ```
 
-#### 
+####  source
 
-This function must return a reactive data source. If an `argsFn` is provided to the emitter, the `sourceFn` is called with an argument containing the object returned by `argsFn`.
+This function must return a reactive data source. If `input` is provided, the `source` is called with an argument containing the object returned by `input`.
 
 Examples:
 
 ```js
 // No args required
-const sourceFn = () => Session.get('test');
+.source(() => Session.get('test'))
 
 // Args passed to subscription
-const sourceFn = args => Meteor.subscribe('post', args.currentPostId);
+.source(args => Meteor.subscribe('post', args.currentPostId));
 ```
 
-##### 2. Change
+##### output
 
-This function is called with an argument containing the returned value from `sourceFn` both when the reactive function provided by `sourceFn` changes, or any of the arguments change.
+This function is called with an argument containing the returned value from `source` both when the reactive function provided by `source` changes, or any of the arguments change.
 
 Examples:
 
 ```js
-const onChange = response => console.log(response);
+.output(response => console.log(response));
 
 // Log subscription readiness
-const onChange = handle => console.log(handle.ready());
+.output(handle => console.log(handle.ready()));
 ```
-
-##### 3. Arguments (Optional)
-
-
 
 #### Return value
 
-Calling `Tracker.emitter` returns an object containing two functions, `stop` and `update`.
+Calling `.output()` returns an object containing two functions, `stop` and `update`.
 
 ```
 stop([callback])
 ```
 
-Calling this method stops the emitter from running (internally this just calls the `stop` method on the Tracker computation). It also takes an optional callback function that gets passed the response value from the emitter `sourceFn`. This allows you to perform extra cleanup, one example might be calling a `stop` on a subscription handle.
+Calling this method stops the conduit from running (internally this just calls the `stop` method on the Tracker computation). It also takes an optional callback function that gets passed the response value from the conduit `source`. This allows you to perform extra cleanup, one example might be calling `stop` on a subscription handle.
 
 ```
 update
 ```
 
-Calling this function notifies the emitter to call the `argsFn`.
-
+Calling this function notifies the conduit to call the `input` function.
 
 ### License
 
