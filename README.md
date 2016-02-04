@@ -33,7 +33,7 @@ let limit = 5;
 // with a `limit` argument and log the subscription readiness
 const todosSubscriptionConduit = conduit
   .input(() => ({ limit }))
-  .source({ limit } => Meteor.subscribe('todos', limit))
+  .source(({ limit }) => Meteor.subscribe('todos', limit))
   .output(handle => console.log(handle.ready()));
 
 // Change state
