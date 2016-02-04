@@ -1,11 +1,11 @@
-# Tracker Emitter
+# Conduit
 
-This package provides an API to easily hook listener and emitter functions into Tracker.
+This package provides a functional API for Tracker.
 
 ## Installation
 
 ```sh
-$ meteor add dburles:tracker-emitter
+$ meteor add dburles:conduit
 ```
 
 ## Examples
@@ -15,10 +15,9 @@ $ meteor add dburles:tracker-emitter
 ```js
 // This example simply logs the current user document
 // to the console whenever it changes
-Tracker.emitter(
-  Meteor.user,
-  response => console.log(response)
-);
+conduit
+  .source(Meteor.user)
+  .output(user => console.log(user));
 ```
 
 ### Advanced usage
@@ -30,25 +29,24 @@ This example highlights working with a Meteor subscription.
 ```js
 let limit = 5;
 
-// This emitter will subscribe to the 'todos' collection
+// This conduit will subscribe to the 'todos' collection
 // with a `limit` argument and log the subscription readiness
-const todosSubscriptionEmitter = Tracker.emitter(
-  args => Meteor.subscribe('todos', args.limit),
-  handle => console.log(handle.ready()),
-  () => ({ limit })
-);
+const todosSubscriptionConduit = conduit
+  .input(() => ({ limit }))
+  .source(args => Meteor.subscribe('todos', args.limit))
+  .output(handle => console.log(handle.ready()));
 
 // Change state
 limit = 10;
 
 // Notify the emitter of the new limit
-todosSubscriptionEmitter.update();
+todosSubscriptionConduit.update();
 
 // At a later time we can stop the emitter and
 // through the callback function, stop the Meteor subscription.
 // In the real world this might live within a React component's
 // `componentDidUnmount` method.
-todosSubscriptionEmitter.stop(handle => handle.stop());
+todosSubscriptionConduit.stop(handle => handle.stop());
 ```
 
 #### Minimongo Cursor
@@ -61,38 +59,46 @@ const state = {
 };
 
 // Watch a mongo cursor
-const todosEmitter = Tracker.emitter(
-  args => {
+const todosConduit = conduit
+  .input(() => ({ hideDone: state.hideDone }))
+  .source(args => {
     const selector = args.hideDone ? { checked: { $ne: true } } : {};
     return Todos.find(selector).fetch();
-  },
-  response => state.todos = response,
-  () => ({ hideDone: state.hideDone })
-);
+  })
+  .output(response => state.todos = response);
 
 // Update state
 state.hideDone = true;
 
-// Notify the `todosEmitter` of the update
-todosEmitter.update();
+// Notify the `todosConduit` of the update
+todosConduit.update();
 
 // Call the stop method to stop the emitter
-todosEmitter.stop();
+todosConduit.stop();
 ```
 
 ## API
 
-### Tracker.emitter
+### conduit
 
 ```
-Tracker.emitter(sourceFn, onChangeFn[, argsFn])
+conduit [.input] .source .output
 ```
 
-#### Arguments
+##### input (optional)
 
-Takes the following 3 functions as arguments:
+Must return an object. This function is called when `update` is called.
 
-##### 1. Source
+Example:
+
+```js
+const argsFn = () => {
+  const { currentPostId } = store.getState();
+  return { currentPostId };
+};
+```
+
+#### 
 
 This function must return a reactive data source. If an `argsFn` is provided to the emitter, the `sourceFn` is called with an argument containing the object returned by `argsFn`.
 
@@ -121,16 +127,7 @@ const onChange = handle => console.log(handle.ready());
 
 ##### 3. Arguments (Optional)
 
-Must return an object. This function is called when `update` is called.
 
-Example:
-
-```js
-const argsFn = () => {
-  const { currentPostId } = store.getState();
-  return { currentPostId };
-};
-```
 
 #### Return value
 

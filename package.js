@@ -1,7 +1,7 @@
 Package.describe({
-  name: 'dburles:tracker-emitter',
+  name: 'dburles:conduit',
   version: '0.0.1',
-  summary: 'React to and emit events from a computation',
+  summary: '',
   git: '',
   documentation: 'README.md'
 });
@@ -13,5 +13,6 @@ Package.onUse(function(api) {
     'tracker',
     'reactive-var'
   ], 'client');
-  api.addFiles('tracker-emitter.js', 'client');
+  api.addFiles('conduit.js', 'client');
+  api.export('conduit', 'client');
 });
