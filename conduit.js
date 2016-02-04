@@ -8,7 +8,7 @@ const transform = (obj, fn) => {
   );
 };
 
-conduit = {
+export const conduit = {
   input(argsFn) {
     this.argsFn = argsFn;
     return this;

@@ -13,6 +13,5 @@ Package.onUse(function(api) {
     'tracker',
     'reactive-var'
   ], 'client');
-  api.addFiles('conduit.js', 'client');
-  api.export('conduit', 'client');
+  api.mainModule('conduit.js', 'client');
 });
