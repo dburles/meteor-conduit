@@ -33,7 +33,7 @@ let limit = 5;
 // with a `limit` argument and log the subscription readiness
 const todosSubscriptionConduit = conduit
   .input(() => ({ limit }))
-  .source(args => Meteor.subscribe('todos', args.limit))
+  .source({ limit } => Meteor.subscribe('todos', limit))
   .output(handle => console.log(handle.ready()));
 
 // Change state
@@ -61,11 +61,11 @@ const state = {
 // Watch a mongo cursor
 const todosConduit = conduit
   .input(() => ({ hideDone: state.hideDone }))
-  .source(args => {
-    const selector = args.hideDone ? { checked: { $ne: true } } : {};
+  .source(input => {
+    const selector = input.hideDone ? { checked: { $ne: true } } : {};
     return Todos.find(selector).fetch();
   })
-  .output(response => state.todos = response);
+  .output(source => state.todos = source);
 
 // Update state
 state.hideDone = true;
